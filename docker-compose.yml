@@ -6,6 +6,8 @@ services:
                 links:
                         - node-b
                         - node-c
+                        - node-d
+                        - node-e
                 ports: 
                         - "8500:8500"
                         - "8300:8300"
@@ -25,7 +27,21 @@ services:
                         - "8320:8300"
                         - "8321:8301"
                         - "8322:8302"
-        agent:
+        node-d:
+                build: .
+                ports: 
+                        - "8505:8500"
+                        - "8330:8300"
+                        - "8331:8301"
+                        - "8332:8302"
+        node-e:
+                build: .
+                ports: 
+                        - "8506:8500"
+                        - "8340:8300"
+                        - "8341:8301"
+                        - "8342:8302"
+        agent-a:
                 build: .
                 links:
                         - node-a
@@ -33,4 +49,13 @@ services:
                         - node-c
                 ports: 
                         - "8503:8500"
+                command: /bin/consul agent -client 0.0.0.0 -data-dir /var/consul
+        agent-b:
+                build: .
+                links:
+                        - node-a
+                        - node-b
+                        - node-c
+                ports: 
+                        - "8504:8500"
                 command: /bin/consul agent -client 0.0.0.0 -data-dir /var/consul
