@@ -1,0 +1,36 @@
+version: '2'
+
+services:
+        node-a:
+                build: .
+                links:
+                        - node-b
+                        - node-c
+                ports: 
+                        - "8500:8500"
+                        - "8300:8300"
+                        - "8301:8301"
+                        - "8302:8302"
+        node-b:
+                build: .
+                ports: 
+                        - "8501:8500"
+                        - "8310:8300"
+                        - "8311:8301"
+                        - "8312:8302"
+        node-c:
+                build: .
+                ports: 
+                        - "8502:8500"
+                        - "8320:8300"
+                        - "8321:8301"
+                        - "8322:8302"
+        agent:
+                build: .
+                links:
+                        - node-a
+                        - node-b
+                        - node-c
+                ports: 
+                        - "8503:8500"
+                command: /bin/consul agent -client 0.0.0.0 -data-dir /var/consul
